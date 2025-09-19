@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NurturCover - Home</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .hero img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 0 auto;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .menu {
+            list-style: none;
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .menu a.active {
+            font-weight: bold;
+            color: red;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 0.9em;
+        }
+
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        .modal-content {
+            background: #fff;
+            margin: 10% auto;
+            padding: 20px;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 400px;
+        }
+
+        .modal-content h2 {
+            margin-top: 0;
+            text-align: center;
+        }
+
+        .modal-content input {
+            width: 100%;
+            padding: 10px;
+            margin: 8px 0;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        .modal-content button {
+            width: 100%;
+            padding: 10px;
+            background: red;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .close {
+            float: right;
+            font-size: 20px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <nav>
+            <h1 class="logo">NurturCover</h1>
+            <ul class="menu">
+                <li><a href="Plans.html">Plans</a></li>
+                <li><a href="Benefits.html">Benefits</a></li>
+                <li><a href="MissionVision.html">Mission & Vision</a></li>
+                <li><a href="#" id="openLogin">Login</a></li>
+                <li><a href="#" id="openRegister">Register</a></li>
+            </ul>
+
+            <!-- Profile icon (hidden by default) -->
+            <a href="profile.html" id="profileIcon" style="display:none;">
+                <img src="images/profile-icon.png" alt="Profile" style="width:40px; height:40px; border-radius:50%;">
+            </a>
+        </nav>
+    </header>
+
+    <main class="hero">
+        <!-- Responsive Logo -->
+        <picture>
+            <source src="images/NurturCover_mobile.png" media="(max-width: 600px)">
+            <source src="images/NurturCover_desktop.png" media="(min-width: 601px)">
+            <img src="images/Screenshot 2025-09-16 134104.png" alt="NurturCover Logo">
+        </picture>
+
+        <div class="dots">
+            <span class="dot active"></span>
+            <span class="dot"></span>
+            <span class="dot"></span>
+        </div>
+    </main>
+
+    <!-- Login Modal -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <span class="close" id="closeLogin">&times;</span>
+            <h2>Login</h2>
+            <form>
+                <input type="text" placeholder="Username" required>
+                <input type="password" placeholder="Password" required>
+                <button type="submit">Login</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Register Modal -->
+    <div id="registerModal" class="modal">
+        <div class="modal-content">
+            <span class="close" id="closeRegister">&times;</span>
+            <h2>Register</h2>
+            <form>
+                <input type="text" placeholder="Full Name" required>
+                <input type="email" placeholder="Email" required>
+                <input type="text" placeholder="Username" required>
+                <input type="password" placeholder="Password" required>
+                <button type="submit">Register</button>
+            </form>
+        </div>
+    </div>
+
+    <footer>
+        <li><a href="terms.html">Terms & Conditions</a></li>
+        <li><a href="claims.html">Claims Process</a></li>
+        <p>© 2025 NurturCover. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Get elements
+        const loginModal = document.getElementById("loginModal");
+        const registerModal = document.getElementById("registerModal");
+
+        const openLogin = document.getElementById("openLogin");
+        const openRegister = document.getElementById("openRegister");
+
+        const closeLogin = document.getElementById("closeLogin");
+        const closeRegister = document.getElementById("closeRegister");
+
+        // Open modals
+        openLogin.onclick = () => loginModal.style.display = "block";
+        openRegister.onclick = () => registerModal.style.display = "block";
+
+        // Close modals
+        closeLogin.onclick = () => loginModal.style.display = "none";
+        closeRegister.onclick = () => registerModal.style.display = "none";
+
+        // Close if clicking outside modal
+        window.onclick = (event) => {
+            if (event.target === loginModal) loginModal.style.display = "none";
+            if (event.target === registerModal) registerModal.style.display = "none";
+        };
+    </script>
+</body>
+
+</html>

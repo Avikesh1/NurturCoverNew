@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NurturCover - Plans</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <header>
+    <nav>
+      <h1 class="logo">NurturCover</h1>
+      <ul class="menu">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="Plans.html" class="active">Plans</a></li>
+        <li><a href="Benefits.html">Benefits</a></li>
+        <li><a href="MissionVision.html">Mission & Vision</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <h2></h2>
+    <div class="plans">
+
+      <!-- GOLD PLAN -->
+      <div class="plan gold">
+        <h3>Gold Plan</h3>
+        <ul>
+          <li>R50,000 Cover</li>
+          <li>Two Free Mental Health Consultations</li>
+          <li>Tire, Rim, Scratch & Dent Cover</li>
+          <li>Payday loans up to 30% of monthly income</li>
+          <li class="dropdown"><span>Monthly Rewards</span></li>
+          <ul class="dropdown-content">
+            <li>Free Airtime Every Month</li>
+            <li>Discounted Grocery Vouchers</li>
+            <li>Fuel Cashback Rewards</li>
+          </ul>
+        </ul>
+      </div>
+
+      <!-- SILVER PLAN -->
+      <div class="plan silver">
+        <h3>Silver Plan</h3>
+        <ul>
+          <li>R30,000 Cover</li>
+          <li>Two Free Mental Health Consultations</li>
+          <li>Either Tire & Rim or Scratch & Dent</li>
+          <li>Payday loans up to 20% of monthly income</li>
+          <li class="dropdown"><span>Monthly Rewards</span></li>
+          <ul class="dropdown-content">
+            <li>Discounted Grocery Vouchers</li>
+            <li>Fuel Cashback Rewards</li>
+          </ul>
+        </ul>
+      </div>
+
+      <!-- BRONZE PLAN -->
+      <div class="plan bronze">
+        <h3>Bronze Plan</h3>
+        <ul>
+          <li>R18,000 Cover</li>
+          <li>Two Free Mental Health Consultations</li>
+          <li>Payday loans up to 10% of monthly income</li>
+          <li class="dropdown"><span>Monthly Rewards</span></li>
+          <ul class="dropdown-content">
+            <li>Discounted Grocery Vouchers</li>
+          </ul>
+        </ul>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <li><a href="terms.html">Terms & Conditions</a></li>
+    <li><a href="claims.html">Claims Process</a></li>
+    <p>© 2025 NurturCover. All rights reserved.</p>
+    </nav>
+  </footer>
+
+  <script>
+    // Toggle dropdown functionality
+    document.querySelectorAll(".dropdown").forEach(dropdown => {
+      dropdown.addEventListener("click", () => {
+        dropdown.classList.toggle("active");
+        const content = dropdown.nextElementSibling;
+        content.classList.toggle("show");
+      });
+    });
+  </script>
+</body>
+
+</html>
