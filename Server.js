@@ -13,12 +13,13 @@ app.use(express.json()); // ✅ no need for body-parser in modern Express
 // Database config
 const dbConfig = {
   user: "sa",
-  password: "your_password", // 🔒 update with your real password
-  server: "localhost\\SQLEXPRESS01",
+  password: "0096", // 🔒 update with your real password
+  server: "localhost",
   database: "NurturCover",
   options: {
     encrypt: false,
     trustServerCertificate: true,
+    instanceName: "SQLEXPRESS01"  // ✅ this is the key update
   },
 };
 
