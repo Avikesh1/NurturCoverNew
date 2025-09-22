@@ -2,10 +2,10 @@
 const sql = require("mssql");
 
 const dbConfig = {
-  user: "sa",                // your SQL Server username
-  password: "0096",          // your SQL Server password
+  user: "NurturCover_shoulderit",                // your SQL Server username
+  password: "3a4aff25ab51620794cf7ab46028ca997a689b88",          // your SQL Server password
   server: "localhost",       // server host
-  database: "NurturCover",   // your database name
+  database: "NurturCover_shoulderit",   // your database name
   options: {
     encrypt: false,
     trustServerCertificate: true,
