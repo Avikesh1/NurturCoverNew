@@ -12,15 +12,11 @@ app.use(express.json()); // ✅ no need for body-parser in modern Express
 
 // Database config
 const dbConfig = {
+  host: "7ba4ns.h.filess.io",
   user: "NurturCover_shoulderit",
-  password: "3a4aff25ab51620794cf7ab46028ca997a689b88", // 🔒 update with your real password
-  server: "localhost",
+  password: "3a4aff25ab51620794cf7ab46028ca997a689b88",
   database: "NurturCover_shoulderit",
-  options: {
-    encrypt: false,
-    trustServerCertificate: true,
-    instanceName: "mysql://NurturCover_shoulderit:3a4aff25ab51620794cf7ab46028ca997a689b88@7ba4ns.h.filess.io:3306/NurturCover_shoulderit"  // ✅ this is the key update
-  },
+  port: 3306
 };
 
 // Connect to SQL Server
