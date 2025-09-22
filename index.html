@@ -130,11 +130,12 @@
         <div class="modal-content">
             <span class="close" id="closeLogin">&times;</span>
             <h2>Login</h2>
-            <form>
-                <input type="text" placeholder="Username" required>
-                <input type="password" placeholder="Password" required>
+            <form id="loginForm"> <!-- 🔴 add form id -->
+                <input type="text" id="loginUsername" placeholder="Username" required>
+                <input type="password" id="loginPassword" placeholder="Password" required>
                 <button type="submit">Login</button>
             </form>
+            <p id="loginMessage" style="color:red; text-align:center;"></p> <!-- 🔴 feedback -->
         </div>
     </div>
 
@@ -143,21 +144,16 @@
         <div class="modal-content">
             <span class="close" id="closeRegister">&times;</span>
             <h2>Register</h2>
-            <form>
-                <input type="text" placeholder="Full Name" required>
-                <input type="email" placeholder="Email" required>
-                <input type="text" placeholder="Username" required>
-                <input type="password" placeholder="Password" required>
+            <form id="registerForm"> <!-- 🔴 add form id -->
+                <input type="text" id="registerName" placeholder="Full Name" required>
+                <input type="email" id="registerEmail" placeholder="Email" required>
+                <input type="text" id="registerUsername" placeholder="Username" required>
+                <input type="password" id="registerPassword" placeholder="Password" required>
                 <button type="submit">Register</button>
             </form>
+            <p id="registerMessage" style="color:red; text-align:center;"></p> <!-- 🔴 feedback -->
         </div>
     </div>
-
-    <footer>
-        <li><a href="terms.html">Terms & Conditions</a></li>
-        <li><a href="claims.html">Claims Process</a></li>
-        <p>© 2025 NurturCover. All rights reserved.</p>
-    </footer>
 
     <script>
         // Get elements
@@ -169,6 +165,8 @@
 
         const closeLogin = document.getElementById("closeLogin");
         const closeRegister = document.getElementById("closeRegister");
+
+        const profileIcon = document.getElementById("profileIcon");
 
         // Open modals
         openLogin.onclick = () => loginModal.style.display = "block";
@@ -183,6 +181,64 @@
             if (event.target === loginModal) loginModal.style.display = "none";
             if (event.target === registerModal) registerModal.style.display = "none";
         };
+
+        // 🔴 Handle Login
+        document.getElementById("loginForm").addEventListener("submit", async (e) => {
+            e.preventDefault();
+
+            const username = document.getElementById("loginUsername").value;
+            const password = document.getElementById("loginPassword").value;
+
+            try {
+                const res = await fetch("http://localhost:5000/api/login", { // 🔴 API endpoint
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ username, password })
+                });
+
+                const data = await res.json();
+                if (res.ok) {
+                    document.getElementById("loginMessage").style.color = "green";
+                    document.getElementById("loginMessage").textContent = "Login successful!";
+                    profileIcon.style.display = "inline"; // 🔴 show profile icon
+                    loginModal.style.display = "none";    // 🔴 close modal
+                } else {
+                    document.getElementById("loginMessage").textContent = data.error || "Login failed";
+                }
+            } catch (err) {
+                document.getElementById("loginMessage").textContent = "Server error";
+            }
+        });
+
+        // 🔴 Handle Register
+        document.getElementById("registerForm").addEventListener("submit", async (e) => {
+            e.preventDefault();
+
+            const name = document.getElementById("registerName").value;
+            const email = document.getElementById("registerEmail").value;
+            const username = document.getElementById("registerUsername").value;
+            const password = document.getElementById("registerPassword").value;
+
+            try {
+                const res = await fetch("http://localhost:5000/api/register", { // 🔴 API endpoint
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ name, email, username, password })
+                });
+
+                const data = await res.json();
+                if (res.ok) {
+                    document.getElementById("registerMessage").style.color = "green";
+                    document.getElementById("registerMessage").textContent = "Registration successful! You can login now.";
+                    registerModal.style.display = "none"; // 🔴 close modal
+                    loginModal.style.display = "block";   // 🔴 open login
+                } else {
+                    document.getElementById("registerMessage").textContent = data.error || "Registration failed";
+                }
+            } catch (err) {
+                document.getElementById("registerMessage").textContent = "Server error";
+            }
+        });
     </script>
 </body>
 

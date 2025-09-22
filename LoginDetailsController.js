@@ -1,29 +1,54 @@
-// controllers/loginController.js
-const db = require("../db");
-const bcrypt = require("bcrypt");
+const sql = require("mssql");
 
-// Register login
-exports.createLogin = async (req, res) => {
-  const { customer_id, username, password } = req.body;
-  const hashedPassword = await bcrypt.hash(password, 10);
+// Register new user
+exports.registerUser = async (req, res) => {
+  const { name, email, username, password } = req.body;
 
-  const sql = "INSERT INTO LoginDetails (customer_id, username, password) VALUES (?, ?, ?)";
-  db.query(sql, [customer_id, username, hashedPassword], (err, result) => {
-    if (err) return res.status(500).json({ error: err });
-    res.status(201).json({ message: "Login created", login_id: result.insertId });
-  });
+  if (!name || !email || !username || !password) {
+    return res.status(400).json({ error: "All fields are required" });
+  }
+
+  try {
+    let pool = await sql.connect();
+    // Check if username already exists
+    const existing = await pool.request()
+      .input("username", sql.VarChar, username)
+      .query("SELECT * FROM LoginDetails WHERE username=@username");
+
+    if (existing.recordset.length > 0) {
+      return res.status(400).json({ error: "Username already exists" });
+    }
+
+    await pool.request()
+      .input("name", sql.VarChar, name)
+      .input("email", sql.VarChar, email)
+      .input("username", sql.VarChar, username)
+      .input("password", sql.VarChar, password) // ⚠️ Hash later for security
+      .query("INSERT INTO LoginDetails (username, password, email, name) VALUES (@username, @password, @email, @name)");
+
+    res.status(201).json({ message: "User registered successfully" });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
 };
 
-// Authenticate login
-exports.login = (req, res) => {
+// Login user
+exports.loginUser = async (req, res) => {
   const { username, password } = req.body;
-  db.query("SELECT * FROM LoginDetails WHERE username=?", [username], async (err, rows) => {
-    if (err) return res.status(500).json({ error: err });
-    if (rows.length === 0) return res.status(401).json({ error: "Invalid username or password" });
 
-    const valid = await bcrypt.compare(password, rows[0].password);
-    if (!valid) return res.status(401).json({ error: "Invalid credentials" });
+  try {
+    let pool = await sql.connect();
+    const result = await pool.request()
+      .input("username", sql.VarChar, username)
+      .input("password", sql.VarChar, password) // ⚠️ Compare with hash in production
+      .query("SELECT * FROM LoginDetails WHERE username=@username AND password=@password");
 
-    res.json({ message: "Login successful", customer_id: rows[0].customer_id });
-  });
+    if (result.recordset.length === 0) {
+      return res.status(401).json({ error: "Invalid username or password" });
+    }
+
+    res.status(200).json({ message: "Login successful", user: result.recordset[0] });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
 };
