@@ -2,14 +2,16 @@ const sql = require("mssql");
 
 // Register new user
 exports.registerUser = async (req, res) => {
-  const { name, email, username, password } = req.body;
+  const { name, email, username, password, popiAccepted } = req.body;
 
-  if (!name || !email || !username || !password) {
-    return res.status(400).json({ error: "All fields are required" });
+  // Check required fields including POPI acceptance
+  if (!name || !email || !username || !password || popiAccepted !== true) {
+    return res.status(400).json({ error: "All fields are required and POPI must be accepted" });
   }
 
   try {
     let pool = await sql.connect();
+
     // Check if username already exists
     const existing = await pool.request()
       .input("username", sql.VarChar, username)
@@ -19,12 +21,14 @@ exports.registerUser = async (req, res) => {
       return res.status(400).json({ error: "Username already exists" });
     }
 
+    // Insert user into database, including POPI acceptance
     await pool.request()
       .input("name", sql.VarChar, name)
       .input("email", sql.VarChar, email)
       .input("username", sql.VarChar, username)
       .input("password", sql.VarChar, password) // ⚠️ Hash later for security
-      .query("INSERT INTO LoginDetails (username, password, email, name) VALUES (@username, @password, @email, @name)");
+      .input("popiAccepted", sql.Bit, popiAccepted) // New column
+      .query("INSERT INTO LoginDetails (username, password, email, name, popiAccepted) VALUES (@username, @password, @email, @name, @popiAccepted)");
 
     res.status(201).json({ message: "User registered successfully" });
   } catch (err) {
