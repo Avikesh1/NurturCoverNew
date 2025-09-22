@@ -1,5 +1,5 @@
 // controllers/beneficiaryController.js
-const db = require("../db");
+const db = require("/NurturCover");
 
 exports.createBeneficiary = (req, res) => {
   const { customer_id, name, surname, id_number } = req.body;

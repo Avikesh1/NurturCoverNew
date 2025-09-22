@@ -1,5 +1,5 @@
 // controllers/planController.js
-const db = require("../db");
+const db = require("/NurturCover");
 
 exports.createPlan = (req, res) => {
   const { customer_id, plan_selected, inception_date, next_reward_date } = req.body;

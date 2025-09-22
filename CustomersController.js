@@ -1,5 +1,5 @@
 // controllers/customerController.js
-const db = require("../db");
+const db = require("/NurturCover");
 
 // Create customer
 exports.createCustomer = (req, res) => {
