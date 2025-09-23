@@ -22,7 +22,7 @@ app.use('/api/plans', planRoutes);
 app.use('/api/auth', authRoutes);
 
 // start server after DB connects
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 3306;
 connectDB()
   .then(() => {
     app.listen(PORT, () => console.log(`Server listening on ${PORT}`));
