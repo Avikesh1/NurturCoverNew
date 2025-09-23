@@ -1,35 +1,33 @@
-const express = require("express");
-const sql = require("mssql");
+const express = require('express');
+const cors = require('cors');
+require('dotenv').config();
+const { connectDB } = require('./DBConnection');
 
-// Import routes
-const customerRoutes = require("./routes/customerRoutes");
-const beneficiaryRoutes = require("./routes/beneficiaryRoutes");
-const planRoutes = require("./routes/planRoutes");
-const authRoutes = require("./routes/authRoutes"); // 🔄 replaces loginRoutes
+const customerRoutes = require('./routes/customerRoutes');
+const beneficiaryRoutes = require('./routes/beneficiaryRoutes');
+const planRoutes = require('./routes/planRoutes');
+const authRoutes = require('./routes/authRoutes');
 
 const app = express();
-app.use(express.json()); // ✅ no need for body-parser in modern Express
+app.use(express.json());
+app.use(cors());
 
-// Database config
-const dbConfig = {
-  host: "7ba4ns.h.filess.io",
-  user: "NurturCover_shoulderit",
-  password: "3a4aff25ab51620794cf7ab46028ca997a689b88",
-  database: "NurturCover_shoulderit",
-  port: 3306
-};
+// simple health check
+app.get('/', (req, res) => res.send({ ok: true, uptime: process.uptime() }));
 
-// Connect to SQL Server
-sql.connect(dbConfig)
-  .then(() => console.log("✅ Connected to SQL Server"))
-  .catch((err) => console.error("❌ DB Connection Failed:", err));
+// attach routes
+app.use('/api/customers', customerRoutes);
+app.use('/api/beneficiaries', beneficiaryRoutes);
+app.use('/api/plans', planRoutes);
+app.use('/api/auth', authRoutes);
 
-// Routes
-app.use("/api/customers", customerRoutes);
-app.use("/api/beneficiaries", beneficiaryRoutes);
-app.use("/api/plans", planRoutes);
-app.use("/api", authRoutes); // 🔄 handles /register and /login
-
-// Start server
+// start server after DB connects
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
+connectDB()
+  .then(() => {
+    app.listen(PORT, () => console.log(`Server listening on ${PORT}`));
+  })
+  .catch(err => {
+    console.error('Failed to connect to DB, server not started', err);
+    process.exit(1);
+  });
