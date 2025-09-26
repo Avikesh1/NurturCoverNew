@@ -1,27 +1,34 @@
-const mysql = require('mysql2/promise');
+const mysql = require("mysql");
 
-// create the connection pool
-const db = mysql.createPool({
-  host: '7ba4ns.h.filess.io',
-  user: 'NurturCover_shoulderit',
-  password: '3a4aff25ab51620794cf7ab46028ca997a689b88',
-  database: 'NurturCover_shoulderit',
-  port: 3306,
-  waitForConnections: true,
-  connectionLimit: 10,
-  queueLimit: 0
+// DB credentials
+const hostname = "7ba4ns.h.filess.io";
+const database = "NurturCover_shoulderit";
+const port = 3306;
+const username = "NurturCover_shoulderit";
+const password = "3a4aff25ab51620794cf7ab46028ca997a689b88";
+
+// create connection
+const db = mysql.createConnection({
+  host: hostname,
+  user: username,
+  password,
+  database,
+  port,
 });
 
-// optional connect function
-async function connectDB() {
-  try {
-    const conn = await db.getConnection();
-    console.log('✅ MySQL connected');
-    conn.release();
-  } catch (err) {
-    console.error('❌ Database connection failed:', err.message);
-    throw err;
-  }
+// function to connect once at startup
+function connectDB() {
+  return new Promise((resolve, reject) => {
+    db.connect((err) => {
+      if (err) {
+        console.error("❌ Database connection failed:", err);
+        reject(err);
+      } else {
+        console.log("✅ Connected to MySQL!");
+        resolve();
+      }
+    });
+  });
 }
 
 module.exports = { connectDB, db };

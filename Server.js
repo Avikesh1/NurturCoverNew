@@ -17,20 +17,20 @@ app.use(cors());
 app.get('/', (req, res) => res.send({ ok: true, uptime: process.uptime() }));
 
 // ✅ register route
-app.post('/api/register', async (req, res) => {
-  try {
-    const { name, email } = req.body;
+app.post('/api/register', (req, res) => {
+  const { name, email } = req.body;
 
-    await db.query(
-      'INSERT INTO users (name, email) VALUES (?, ?)',
-      [name, email]
-    );
-
-    res.json({ success: true });
-  } catch (err) {
-    console.error('Register error:', err);
-    res.status(500).json({ error: 'Database insert failed' });
-  }
+  db.query(
+    'INSERT INTO users (name, email) VALUES (?, ?)',
+    [name, email],
+    (err, result) => {
+      if (err) {
+        console.error('Register error:', err);
+        return res.status(500).json({ error: 'Database insert failed' });
+      }
+      res.json({ success: true, insertedId: result.insertId });
+    }
+  );
 });
 
 // attach routes
@@ -43,9 +43,11 @@ app.use('/api/auth', authRoutes);
 const PORT = process.env.PORT || 5000;
 connectDB()
   .then(() => {
-    app.listen(PORT, () => console.log(`Server listening on http://localhost:5000`));
+    app.listen(PORT, () =>
+      console.log(`Server listening on http://localhost:5000`)
+    );
   })
-  .catch(err => {
+  .catch((err) => {
     console.error('❌ Failed to connect to DB, server not started:', err);
     process.exit(1);
   });
